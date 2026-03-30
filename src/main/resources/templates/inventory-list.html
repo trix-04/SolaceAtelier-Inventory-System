@@ -1,6 +1,8 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org"
- xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
   <head th:replace="~{fragments/layout :: header}"></head>
   <body>
     <div th:replace="~{fragments/layout :: navbar}"></div>
@@ -8,8 +10,12 @@
     <div class="container mt-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Warehouse Inventory</h2>
-       <a href="/inventory/add" class="btn btn-success"
-   sec:authorize="hasAnyRole('ADMIN','STAFF')">+ Add New Product</a>
+        <a
+          href="/inventory/add"
+          class="btn btn-success"
+          sec:authorize="hasAnyRole('ADMIN','STAFF')"
+          >+ Add New Product</a
+        >
       </div>
 
       <form th:action="@{/inventory}" method="get" class="row g-3 mb-4">
@@ -17,15 +23,22 @@
           <input
             type="text"
             name="brand"
+            th:value="${brand}"
             class="form-control"
             placeholder="Search by Brand (e.g. Solace)"
           />
         </div>
         <div class="col-md-4">
           <select name="sortField" class="form-select">
-            <option value="name">Sort by Name</option>
-            <option value="price">Sort by Price</option>
-            <option value="stock">Sort by Stock</option>
+            <option value="name" th:selected="${sortField == 'name'}">
+              Sort by Name
+            </option>
+            <option value="price" th:selected="${sortField == 'price'}">
+              Sort by Price
+            </option>
+            <option value="stock" th:selected="${sortField == 'stock'}">
+              Sort by Stock
+            </option>
           </select>
         </div>
         <div class="col-md-2">
@@ -42,6 +55,7 @@
             <th>Price</th>
             <th>Stock</th>
             <th>Date Added</th>
+            <th sec:authorize="hasRole('ADMIN')">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -54,9 +68,67 @@
             <td
               th:text="${#temporals.format(p.createdAt, 'yyyy-MM-dd HH:mm')}"
             ></td>
+            <td sec:authorize="hasRole('ADMIN')">
+              <a
+                th:href="@{/inventory/edit/{id}(id=${p.id})}"
+                class="btn btn-sm btn-outline-primary"
+                >Edit</a
+              >
+              <a
+                th:href="@{/inventory/delete/{id}(id=${p.id})}"
+                class="btn btn-sm btn-outline-danger"
+                onclick="
+                  return confirm('Confirm permanent removal from warehouse?');
+                "
+                >Delete</a
+              >
+            </td>
           </tr>
         </tbody>
       </table>
+
+      <nav aria-label="Page navigation" th:if="${totalPages > 0}">
+        <ul class="pagination justify-content-center mt-4">
+          <li
+            class="page-item"
+            th:classappend="${currentPage == 0} ? 'disabled'"
+          >
+            <a
+              class="page-link"
+              th:href="@{/inventory(page=${currentPage - 1}, brand=${brand}, sortField=${sortField})}"
+              >Previous</a
+            >
+          </li>
+
+          <li
+            class="page-item"
+            th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            th:classappend="${currentPage == i} ? 'active'"
+          >
+            <a
+              class="page-link"
+              th:href="@{/inventory(page=${i}, brand=${brand}, sortField=${sortField})}"
+              th:text="${i + 1}"
+            ></a>
+          </li>
+
+          <li
+            class="page-item"
+            th:classappend="${currentPage + 1 == totalPages} ? 'disabled'"
+          >
+            <a
+              class="page-link"
+              th:href="@{/inventory(page=${currentPage + 1}, brand=${brand}, sortField=${sortField})}"
+              >Next</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <p class="text-center text-muted">
+        Showing page <span th:text="${currentPage + 1}"></span> of
+        <span th:text="${totalPages}"></span>
+      </p>
     </div>
   </body>
 </html>

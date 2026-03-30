@@ -1,33 +1,49 @@
-# Solace Atelier Inventory System
+# **SOLACE ATELIER | WAREHOUSEOS**
 
-This is our CPAN-228 project for Category 1 (E-Commerce / Clothes Warehouse).  
-We’re building an inventory management system for a clothing/fashion brand so it’s easier to track products, variants (size/color), and stock at different locations.
+Inventory management system for a clothing brand. This version integrates full security layers and high-performance server-side data management.
 
-## What the system will do
-- Store **products** (name, category, brand, price, active status)
-- Store **product variants** (SKU, size, color, cost, reorder point)
-- Track **inventory by location** (distribution centers)
-- Record **inventory changes** in a log (receiving, transfers, adjustments, returns)
+## **TECH STACK**
 
-## Tools / Tech
-- Java 17
-- Spring Boot (Maven)
-- Spring Web
-- Thymeleaf  
-- (Later) Spring Data JPA + a database (H2 or MySQL)
+- **Java 17 / Spring Boot 3.5.13**
+- **Spring Security**: BCrypt password encoding and role-based access.
+- **Spring Data JPA**: H2 in-memory database with server-side pagination.
+- **Thymeleaf**: Dynamic rendering with Security dialect integration.
+- **Bootstrap 5**: Responsive and professional UI styling.
 
-## How to run the project
-### Requirements
-- Java 17 installed (Temurin/Adoptium is what we used)
-- Git
+---
 
-### Steps
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/trix-04/SolaceAtelier-Inventory-System.git
-   cd SolaceAtelier-Inventory-System
-2. Type and run this command in your systems terminal
-    ```bash
-    ./mvnw spring-boot:run
-    ```
-3. Then open 'http://localhost:8080' in your browser.
+## **DELIVERABLES FULFILLED**
+
+### **DELIVERABLE 1: DATA & PRESENTATION**
+
+- **Server-Side Pagination/Sorting**: Utilizes `Pageable` to handle data efficiently at the database level.
+- **Automated Data Seeding**: Initial records are auto-loaded via `data.sql` for immediate testing upon startup.
+- **Input Validation**: Strict rejection of invalid data (e.g., negative stock, empty names) with dynamic UI feedback.
+
+### **DELIVERABLE 2: SECURITY & USER MANAGEMENT**
+
+- **BCrypt Encryption**: Zero plain-text password storage.
+- **Role-Based Access Control (RBAC)**: Defined roles (**Admin**, **Staff**, **Customer**) dynamically restrict application capabilities.
+- **Administrative Interface**: Dedicated tools for editing and deleting warehouse entities, strictly role-gated.
+- **Identity Persistence**: Logged-in user identity and assigned roles are visible globally in the navbar.
+
+---
+
+## **ACCESS CREDENTIALS**
+
+| ROLE         | USERNAME   | PASSWORD      | PERMISSIONS               |
+| :----------- | :--------- | :------------ | :------------------------ |
+| **Admin**    | `admin`    | `admin123`    | Full Access (Edit/Delete) |
+| **Staff**    | `staff`    | `staff123`    | View & Add Inventory      |
+| **Customer** | `customer` | `customer123` | Read-only Inventory       |
+
+---
+
+## **SETUP & EXECUTION**
+
+1.  **Clone**: `git clone https://github.com/trix-04/SolaceAtelier-Inventory-System.git`
+2.  **Build**: `./mvnw clean install`
+3.  **Run**: `./mvnw spring-boot:run`
+4.  **Access**: `http://localhost:8080`
+
+---
