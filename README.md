@@ -1,35 +1,91 @@
-# **SOLACE ATELIER | WAREHOUSEOS**
+# SOLACE ATELIER INVENTORY SYSTEM
 
-Inventory management system for a clothing brand. This version integrates full security layers and high-performance server-side data management.
+## **Overview**
+The Solace Atelier Inventory System is a web-based application built using Spring Boot and Thymeleaf. It allows users to manage inventory items through a simple and structured interface, while also supporting secure user authentication and role-based access control.
 
-## **TECH STACK**
-
-- **Java 17 / Spring Boot 3.5.13**
-- **Spring Security**: BCrypt password encoding and role-based access.
-- **Spring Data JPA**: H2 in-memory database with server-side pagination.
-- **Thymeleaf**: Dynamic rendering with Security dialect integration.
-- **Bootstrap 5**: Responsive and professional UI styling.
+The application demonstrates full-stack development concepts including front-end templating, database integration, security and deployment using Docker.
 
 ---
 
-## **DELIVERABLES FULFILLED**
-
-### **DELIVERABLE 1: DATA & PRESENTATION**
-
-- **Server-Side Pagination/Sorting**: Utilizes `Pageable` to handle data efficiently at the database level.
-- **Automated Data Seeding**: Initial records are auto-loaded via `data.sql` for immediate testing upon startup.
-- **Input Validation**: Strict rejection of invalid data (e.g., negative stock, empty names) with dynamic UI feedback.
-
-### **DELIVERABLE 2: SECURITY & USER MANAGEMENT**
-
-- **BCrypt Encryption**: Zero plain-text password storage.
-- **Role-Based Access Control (RBAC)**: Defined roles (**Admin**, **Staff**, **Customer**) dynamically restrict application capabilities.
-- **Administrative Interface**: Dedicated tools for editing and deleting warehouse entities, strictly role-gated.
-- **Identity Persistence**: Logged-in user identity and assigned roles are visible globally in the navbar.
+## Features
+- User registration and login system
+- Role based access control (Admin, Staff, Customer
+- Add, edit and delete inventory items
+- Form validation with user-friendly error messages
+- Persistent data storage usign Spring Data JPA
+- Responsive UI using Bootstrap
+- Secure password handling with BCrypt
+- Environment-based configuration (H2 for development, MySQL for QA)
+- Docker support for running the full application stack
 
 ---
 
-## **ACCESS CREDENTIALS**
+## Technologies Used
+- Java 17
+- Spring Boot 3.5.13
+- Spring Security (BCrypt password encoding and role-based access)
+- Spring Data JPA (database interaction and persistence)
+- Thymeleaf (dynamic HTML rendering)
+- Bootstrap 5 (responsive UI design)
+- H2 Database (development)
+- MySQL (QA environment via Docker)
+- Docker & Docker COmpose
+
+---
+
+## Running the Application (Development)
+
+To run the app locally using the H2 in-memory database:
+
+- Open terminal and type:
+
+```bash
+.\mvnw.cmd spring-boot:run
+
+```
+- Then open your browser and go to:
+
+```bash
+http://localhost:8080
+```
+
+## Running the Application with Docker (QA Environment)
+Make sure Docker is first installed and running on your machine.
+From the root of the project, run:
+
+```bash
+docker-compose up --build
+```
+This will start:
+- The Spring Boot application
+- A MySQL database container
+
+Once everything is running,open:
+```bash
+http://localhost:8080
+```
+---
+## Environment Profiles
+The application supports two environments:
+
+**Development (dev)**
+- Uses H2 in-memory database
+- Fast and easy for local testing
+
+**QA (qa)**
+- Uses MySQL database running in Docker
+- Simulates a production-like environemnt
+
+To switch profiles manually:
+```bash
+-Dspring.profiles.active=qa
+```
+
+---
+
+## **Demo Accounts**
+
+You can log in using the following accounts:
 
 | ROLE         | USERNAME   | PASSWORD      | PERMISSIONS               |
 | :----------- | :--------- | :------------ | :------------------------ |
@@ -39,11 +95,25 @@ Inventory management system for a clothing brand. This version integrates full s
 
 ---
 
-## **SETUP & EXECUTION**
+## **Project Structure**
+- Controllers handle routing and user requests
+- Services contain business logic
+- Repositories manage database interaction
+- Templates (Thymeleaf) handle UI rendering
+- Securing configuration manages authentication and authorization
 
-1.  **Clone**: `git clone https://github.com/trix-04/SolaceAtelier-Inventory-System.git`
-2.  **Build**: `./mvnw clean install`
-3.  **Run**: `./mvnw spring-boot:run`
-4.  **Access**: `http://localhost:8080`
+---
+
+## Team Contributions
+- Trish Figueroa - worked on UI design, inventory features and README documentation. Assisted in implementing Docker setup & MySQL database integration
+- Sahib Soor - (add contribution)
+- Berra Tekin - (add contribution)
+
+---
+
+## Notes
+This project builds on previous deliverables by improving stability, adding environment configuration and preparing the application for deployment using Docker.
+
+The goal was to create a complete and functional system that can run consistently across different environment.
 
 ---
