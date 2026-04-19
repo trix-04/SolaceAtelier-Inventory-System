@@ -6,9 +6,7 @@ data/
 .vscode/
 .idea/
 *.iml
-.claude/
 docs/
-CLAUDE.md
 *.md
 .DS_Store
 Thumbs.db
