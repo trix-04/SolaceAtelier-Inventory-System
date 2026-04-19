@@ -46,46 +46,52 @@
         </div>
       </form>
 
-      <table class="table table-hover bg-white shadow-sm">
-        <thead class="table-dark">
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Date Added</th>
-            <th sec:authorize="hasRole('ADMIN')">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="p : ${products}">
-            <td th:text="${p.id}"></td>
-            <td th:text="${p.name}"></td>
-            <td th:text="${p.brand}"></td>
-            <td th:text="${'$' + p.price}"></td>
-            <td th:text="${p.stock}"></td>
-            <td
-              th:text="${#temporals.format(p.createdAt, 'yyyy-MM-dd HH:mm')}"
-            ></td>
-            <td sec:authorize="hasRole('ADMIN')">
-              <a
-                th:href="@{/inventory/edit/{id}(id=${p.id})}"
-                class="btn btn-sm btn-outline-primary"
-                >Edit</a
-              >
-              <a
-                th:href="@{/inventory/delete/{id}(id=${p.id})}"
-                class="btn btn-sm btn-outline-danger"
-                onclick="
-                  return confirm('Confirm permanent removal from warehouse?');
-                "
-                >Delete</a
-              >
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-hover bg-white shadow-sm">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Brand</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Date Added</th>
+              <th sec:authorize="hasRole('ADMIN')">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="p : ${products}">
+              <td th:text="${p.id}"></td>
+              <td th:text="${p.name}"></td>
+              <td th:text="${p.brand}"></td>
+              <td th:text="${'$' + p.price}"></td>
+              <td th:text="${p.stock}"></td>
+              <td
+                th:text="${#temporals.format(p.createdAt, 'yyyy-MM-dd HH:mm')}"
+              ></td>
+              <td sec:authorize="hasRole('ADMIN')" class="text-nowrap">
+                <div class="d-flex flex-nowrap gap-2">
+                  <a
+                  th:href="@{/inventory/edit/{id}(id=${p.id})}"
+                  class="btn btn-sm btn-outline-primary"
+                  >
+                  Edit
+                </a>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteModal"
+                    th:attr="data-id=${p.id}"
+                    >
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <nav aria-label="Page navigation" th:if="${totalPages > 0}">
         <ul class="pagination justify-content-center mt-4">
@@ -130,5 +136,52 @@
         <span th:text="${totalPages}"></span>
       </p>
     </div>
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm Deletion</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to permanently remove this item from the warehouse inventory?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            
+            <form id="deleteForm" method="get" class="m-0">
+              <button type="submit" class="btn btn-danger">
+                Delete
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const deleteModal = document.getElementById("deleteModal");
+        const deleteLink = document.getElementById("deleteLink");
+
+        deleteModal.addEventListener("show.bs.modal", function (event) {
+          const button = event.relatedTarget;
+          const productId = button.getAttribute("data-id");
+          
+          deleteForm.action = "/inventory/delete/" + productId;
+        });
+      });
+    </script>
   </body>
 </html>
