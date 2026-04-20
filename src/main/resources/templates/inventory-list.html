@@ -72,56 +72,15 @@
               <td sec:authorize="hasRole('ADMIN')" class="text-nowrap">
                 <div class="d-flex flex-nowrap gap-2">
                   <a
-                  th:href="@{/inventory/edit/{id}(id=${p.id})}"
-                  class="btn btn-sm btn-outline-primary"
-                  >
-                  Edit
-                </a>
+                    th:href="@{/inventory/edit/{id}(id=${p.id})}"
+                    class="btn btn-sm btn-outline-primary"
+                  >Edit</a>
                   <button
                     type="button"
                     class="btn btn-sm btn-outline-danger"
                     data-bs-toggle="modal"
-                    th:attr="data-bs-target='#deleteModal' + ${p.id}"                    >
-                    Delete
-                  </button>
-                </div>
-
-                <div class="modal fade" th:id="'deleteModal' + ${p.id}" tabindex="-1" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered modal-sm modal-md">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title">Confirm Deletion</h5>
-                        <button
-                          type="button"
-                          class="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                        ></button>
-                      </div>
-
-                      <div class="modal-body">
-                        <p class="mb-0 confirm-delete-text">
-                          Are you sure you want to permanently remove this item from the warehouse inventory?
-                        </p>
-                      </div>
-
-                      <div class="modal-footer">
-                        <button
-                          type="button"
-                          class="btn btn-secondary"
-                          data-bs-dismiss="modal"
-                        >
-                          Cancel
-                        </button>
-                        <a
-                          th:href="@{/inventory/delete/{id}(id=${p.id})}"
-                          class="btn btn-danger"
-                        >
-                          Delete
-                        </a>
-                      </div>
-                    </div>
-                  </div>
+                    th:attr="data-bs-target='#deleteModal' + ${p.id}"
+                  >Delete</button>
                 </div>
               </td>
             </tr>
@@ -172,6 +131,31 @@
         <span th:text="${totalPages}"></span>
       </p>
     </div>
+  <!-- Delete confirmation modals rendered at body level (outside table/container) -->
+  <div th:each="p : ${products}" sec:authorize="hasRole('ADMIN')">
+    <div class="modal fade" th:id="'deleteModal' + ${p.id}" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm Deletion</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="mb-0 confirm-delete-text">
+              Are you sure you want to permanently remove
+              <strong th:text="${p.name}"></strong>
+              from the warehouse inventory?
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <a th:href="@{/inventory/delete/{id}(id=${p.id})}" class="btn btn-danger">Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div th:replace="~{fragments/layout :: scripts}"></div>
   </body>
 </html>
